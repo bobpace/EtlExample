@@ -10,8 +10,8 @@ namespace EtlExample
         {
             foreach (var value in rows)
             {
-                Utilities.Log("second");
-                yield return Row.FromObject(value);
+                Utilities.Log("secondAction: {0}", value["id"]);
+                yield return value;
             }
         }
     }

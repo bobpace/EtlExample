@@ -10,5 +10,10 @@ namespace EtlExample
             var id = Thread.CurrentThread.ManagedThreadId;
             Console.WriteLine("calling {0} from {1}", name, id);
         }
+
+        public static void Log(string formatString, params object[] parameters)
+        {
+            Log(string.Format(formatString, parameters));
+        }
     }
 }
