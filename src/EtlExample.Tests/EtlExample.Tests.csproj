@@ -90,7 +90,8 @@
     <Compile Include="Refactor\DefaultPropertyTypeValuesProviderTests.cs" />
     <Compile Include="EtlTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Refactor\ProcessRefactorTests.cs" />
+    <Compile Include="Refactor\ExtensionsTests.cs" />
+    <Compile Include="Refactor\PropertyTypeRowBuilderTests.cs" />
     <Compile Include="Verifies.cs" />
   </ItemGroup>
   <ItemGroup>

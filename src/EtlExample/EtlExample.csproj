@@ -84,6 +84,8 @@
     <Compile Include="Refactor\CreatePropertyTypeRow.cs" />
     <Compile Include="Refactor\CsvFileData.cs" />
     <Compile Include="Refactor\DefaultPropertyTypeValuesProvider.cs" />
+    <Compile Include="Refactor\Extensions.cs" />
+    <Compile Include="Refactor\IPropertyTypeRowBuilder.cs" />
     <Compile Include="Refactor\IPropertyTypeRowCreator.cs" />
     <Compile Include="Refactor\IPropertyTypeValuesProvider.cs" />
     <Compile Include="Refactor\ProcessRefactor.cs" />

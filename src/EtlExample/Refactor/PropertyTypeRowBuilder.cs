@@ -5,11 +5,15 @@ using Rhino.Etl.Core;
 
 namespace EtlExample.Refactor
 {
-    public class PropertyTypeRowBuilder
+    public class PropertyTypeRowBuilder : IPropertyTypeRowBuilder
     {
         readonly IPropertyTypeValuesProvider _propertyTypeValuesProvider;
         readonly int _id;
         readonly IDictionary<string, string> _data;
+
+        public PropertyTypeRowBuilder()
+        {
+        }
 
         public PropertyTypeRowBuilder(int id, IDictionary<string, string> data)
             : this(new DefaultPropertyTypeValuesProvider(), id, data)
@@ -29,8 +33,8 @@ namespace EtlExample.Refactor
         {
             return _propertyTypeValuesProvider
                 .GetPropertyTypes<T>()
-                .Select(kvp => ModifyValue(kvp, ChangeFirstLetterToLower))
-                .Select(kvp => ModifyValue(kvp, x => _data[x]))
+                .Select(kvp => kvp.ChangeValue(x => x.ChangeFirstLetterToLower()))
+                .Select(kvp => kvp.ChangeValue(x => _data[x]))
                 .TakeWhile(kvp => !string.IsNullOrEmpty(kvp.Value) && kvp.Value.ToLower() != "null")
                 .Select(kvp => rowCreator(_id, kvp.Key, kvp.Value));
         }
@@ -40,23 +44,9 @@ namespace EtlExample.Refactor
             return GetPropertyTypeRowsFor<T>((x, y, z) => DefaultRow(x, y, z, typeof (T)));
         }
 
-        private static string ChangeFirstLetterToLower(string input)
+        public static Row DefaultRow(int id, int propertyTypeId, string propertyValue, Type propertyTypeEnum)
         {
-            var chars = input.ToCharArray();
-            chars[0] = char.ToLower(chars[0]);
-            return new string(chars);
-        }
-
-        private static KeyValuePair<int, string> ModifyValue(KeyValuePair<int, string> item, Func<string, string> provideNewValue)
-        {
-            var oldValue = item.Value;
-            var newValue = provideNewValue(oldValue);
-            return new KeyValuePair<int, string>(item.Key, newValue);
-        }
-
-        private static Row DefaultRow(int id, int propertyTypeId, string propertyValue, Type enumType)
-        {
-            var typeName = enumType.Name;
+            var typeName = propertyTypeEnum.Name;
             var idColumnName = string.Format("{0}ID", typeName.Replace("PropertyType", ""));
             var propertyTypeIdColumnName = string.Format("{0}ID", typeName);
 
