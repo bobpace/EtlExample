@@ -78,6 +78,16 @@
     <Compile Include="FirstAction.cs" />
     <Compile Include="MainProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Refactor\Address.cs" />
+    <Compile Include="Refactor\AddressPropertyType.cs" />
+    <Compile Include="Refactor\AddressPropertyTypeRowCreator.cs" />
+    <Compile Include="Refactor\CreatePropertyTypeRow.cs" />
+    <Compile Include="Refactor\CsvFileData.cs" />
+    <Compile Include="Refactor\DefaultPropertyTypeValuesProvider.cs" />
+    <Compile Include="Refactor\IPropertyTypeRowCreator.cs" />
+    <Compile Include="Refactor\IPropertyTypeValuesProvider.cs" />
+    <Compile Include="Refactor\ProcessRefactor.cs" />
+    <Compile Include="Refactor\PropertyTypeRowBuilder.cs" />
     <Compile Include="SecondAction.cs" />
     <Compile Include="SingleThreadedMainProcess.cs" />
     <Compile Include="Utilities.cs" />
