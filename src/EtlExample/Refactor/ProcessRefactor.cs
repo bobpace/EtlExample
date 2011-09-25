@@ -14,6 +14,7 @@ namespace EtlExample.Refactor
                 .SelectRowsAs(x =>
                 {
                     int id = Address.Load(x["locationIdentifier"]).AddressId;
+                    //return new PropertyTypeRowBuilder(id, x);
                     return new PropertyTypeRowBuilder(id, x);
                 })
                 .SelectMany(x => x.GetPropertyTypeRowsFor<AddressPropertyType>());

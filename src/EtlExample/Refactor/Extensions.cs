@@ -7,6 +7,7 @@ namespace EtlExample.Refactor
     {
         public static string ChangeFirstLetterToLower(this string input)
         {
+            if (input == null) return null;
             var chars = input.ToCharArray();
             chars[0] = char.ToLower(chars[0]);
             return new string(chars);

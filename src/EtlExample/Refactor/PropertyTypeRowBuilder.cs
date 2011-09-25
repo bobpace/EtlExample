@@ -11,10 +11,6 @@ namespace EtlExample.Refactor
         readonly int _id;
         readonly IDictionary<string, string> _data;
 
-        public PropertyTypeRowBuilder()
-        {
-        }
-
         public PropertyTypeRowBuilder(int id, IDictionary<string, string> data)
             : this(new DefaultPropertyTypeValuesProvider(), id, data)
         {

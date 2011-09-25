@@ -7,6 +7,6 @@
         LocationUrl,
         LocationLogoName,
         LocationPhotoNames,
-        Keywords
+        Keywords,
     }
 }

@@ -90,6 +90,7 @@
     <Compile Include="Refactor\IPropertyTypeValuesProvider.cs" />
     <Compile Include="Refactor\ProcessRefactor.cs" />
     <Compile Include="Refactor\PropertyTypeRowBuilder.cs" />
+    <Compile Include="Refactor\StubPropertyTypeValuesProvider.cs" />
     <Compile Include="SecondAction.cs" />
     <Compile Include="SingleThreadedMainProcess.cs" />
     <Compile Include="Utilities.cs" />

@@ -6,6 +6,5 @@ namespace EtlExample.Refactor
     public interface IPropertyTypeValuesProvider
     {
         IEnumerable<KeyValuePair<int, string>> GetPropertyTypes<T>() where T : struct, IConvertible;
-        IEnumerable<KeyValuePair<int, string>> GetPropertyTypes(Type enumType);
     }
 }

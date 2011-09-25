@@ -8,11 +8,7 @@ namespace EtlExample.Refactor
     {
         public IEnumerable<KeyValuePair<int, string>> GetPropertyTypes<T>() where T : struct, IConvertible
         {
-            return GetPropertyTypes(typeof(T));
-        }
-
-        public IEnumerable<KeyValuePair<int, string>> GetPropertyTypes(Type enumType)
-        {
+            var enumType = typeof(T);
             if (!enumType.IsEnum)
             {
                 throw new ArgumentException("T must be an enum");
