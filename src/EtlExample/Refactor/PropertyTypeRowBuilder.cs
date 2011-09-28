@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Rhino.Etl.Core;
 
@@ -10,11 +11,6 @@ namespace EtlExample.Refactor
         readonly IPropertyTypeValuesProvider _propertyTypeValuesProvider;
         readonly int _id;
         readonly IDictionary<string, string> _data;
-
-        public PropertyTypeRowBuilder(int id, IDictionary<string, string> data)
-            : this(new DefaultPropertyTypeValuesProvider(), id, data)
-        {
-        }
 
         public PropertyTypeRowBuilder(IPropertyTypeValuesProvider propertyTypeValuesProvider,
                                       int id,
@@ -27,6 +23,7 @@ namespace EtlExample.Refactor
 
         public IEnumerable<Row> GetPropertyTypeRowsFor<T>(CreatePropertyTypeRow<T> rowCreator) where T : struct, IConvertible
         {
+            Debug.WriteLine("getting property type rows for");
             return _propertyTypeValuesProvider
                 .GetPropertyTypes<T>()
                 .Select(kvp => kvp.ChangeValue(x => x.ChangeFirstLetterToLower()))
@@ -42,6 +39,7 @@ namespace EtlExample.Refactor
 
         public static Row DefaultRow(int id, int propertyTypeId, string propertyValue, Type propertyTypeEnum)
         {
+            Debug.WriteLine("creating row");
             var typeName = propertyTypeEnum.Name;
             var idColumnName = string.Format("{0}ID", typeName.Replace("PropertyType", ""));
             var propertyTypeIdColumnName = string.Format("{0}ID", typeName);

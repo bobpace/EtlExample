@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Rhino.Etl.Core;
 
@@ -10,12 +11,14 @@ namespace EtlExample.Refactor
 
         public IEnumerable<Row> Execute(IEnumerable<Row> rows)
         {
+            var propertyTypeValueProvider =
+                new CachingPropertyTypeValuesProvider(new DefaultPropertyTypeValuesProvider());
             return CsvFileData
                 .SelectRowsAs(x =>
                 {
+                    Debug.WriteLine("selecting as property type row builder");
                     int id = Address.Load(x["locationIdentifier"]).AddressId;
-                    //return new PropertyTypeRowBuilder(id, x);
-                    return new PropertyTypeRowBuilder(id, x);
+                    return new PropertyTypeRowBuilder(propertyTypeValueProvider, id, x);
                 })
                 .SelectMany(x => x.GetPropertyTypeRowsFor<AddressPropertyType>());
         }

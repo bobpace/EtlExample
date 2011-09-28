@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using EtlExample.Refactor;
 using Rhino.Etl.Core;
+using Rhino.Mocks;
 using Xunit;
 
 namespace EtlExample.Tests.Refactor
@@ -12,6 +13,7 @@ namespace EtlExample.Tests.Refactor
     {
         readonly int _id;
         readonly IDictionary<string, string> _data;
+        IPropertyTypeValuesProvider propertyTypeValuesProvider;
 
         public PropertyTypeRowBuilderTests()
         {
@@ -23,9 +25,14 @@ namespace EtlExample.Tests.Refactor
                 {"sampleName", "value3"},
             };
 
+            propertyTypeValuesProvider = MockFor<IPropertyTypeValuesProvider>();
+            propertyTypeValuesProvider
+                .Expect(x => x.GetPropertyTypes<SampleAddressPropertyType>())
+                .Return(new DefaultPropertyTypeValuesProvider().GetPropertyTypes<SampleAddressPropertyType>());
+
             Services.Container.Configure(
                 x => x.For<PropertyTypeRowBuilder>()
-                    .Use(() => new PropertyTypeRowBuilder(_id, _data)));
+                    .Use(() => new PropertyTypeRowBuilder(propertyTypeValuesProvider, _id, _data)));
         }
 
         [Fact]

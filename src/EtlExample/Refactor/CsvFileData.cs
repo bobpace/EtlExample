@@ -6,7 +6,17 @@ namespace EtlExample.Refactor
 {
     public class CsvFileData
     {
-        IDictionary<string, IDictionary<string, string>> _data;
+        readonly IDictionary<string, IDictionary<string, string>> _data;
+
+        public CsvFileData()
+            : this(new Dictionary<string, IDictionary<string, string>>())
+        {
+        }
+
+        public CsvFileData(IDictionary<string, IDictionary<string,string>> data)
+        {
+            _data = data;
+        }
 
         public IEnumerable<T> SelectRowsAs<T>(Func<IDictionary<string,string>, T> selectAction)
         {

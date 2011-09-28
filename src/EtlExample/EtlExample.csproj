@@ -81,6 +81,7 @@
     <Compile Include="Refactor\Address.cs" />
     <Compile Include="Refactor\AddressPropertyType.cs" />
     <Compile Include="Refactor\AddressPropertyTypeRowCreator.cs" />
+    <Compile Include="Refactor\CachingPropertyTypeValuesProvider.cs" />
     <Compile Include="Refactor\CreatePropertyTypeRow.cs" />
     <Compile Include="Refactor\CsvFileData.cs" />
     <Compile Include="Refactor\DefaultPropertyTypeValuesProvider.cs" />
