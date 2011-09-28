@@ -11,21 +11,22 @@ namespace EtlExample.Tests.Refactor
         [Test]
         public void deferred_execution_on_execute()
         {
-            var row = new Row
-            {
-                {"locationIdentifier", "1"},
-                {"serviceArea", "redv2"},
-                {"locationDescription", "redv3"},
-                {"locationUrl", "redv4"},
-                {"locationLogoName", "redv5"},
-                {"locationPhotoNames", "redv6"},
-                {"keywords", "redv7"},
-            };
+            var row = new Row();
+            row["locationIdentifier"] = "1";
+            row["serviceArea"] = null;
+            row["locationDescription"] = "null";
+            row["locationUrl"] = "NULL";
+            row["locationLogoName"] = "redv5";
+            row["locationPhotoNames"] = "redv6";
+            row["keywords"] = "redv7";
+
             var process = new ProcessRefactor();
             var enumerable = process.Execute(row);
             var enumerator = enumerable.GetEnumerator();
             while (enumerator.MoveNext())
             {
+                var sqlCommand = enumerator.Current;
+                Assert.IsTrue(!string.IsNullOrEmpty(sqlCommand.CommandText));
             }
         }
     }
