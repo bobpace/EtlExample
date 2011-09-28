@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using EtlExample.Refactor;
 using NUnit.Framework;
+using Row = Rhino.Etl.Core.Row;
 
 namespace EtlExample.Tests.Refactor
 {
@@ -11,14 +11,14 @@ namespace EtlExample.Tests.Refactor
     public class PropertyTypeRowBuilderTests
     {
         int _id;
-        IDictionary<string, string> _data;
+        Row _data;
         PropertyTypeCommandBuilder SUT;
 
         [SetUp]
         public void SetUp()
         {
             _id = 100;
-            _data = new Dictionary<string, string>
+            _data = new Row
             {
                 {"logoName", "value1"},
                 {"photoName", "value2"},

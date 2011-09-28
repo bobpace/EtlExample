@@ -1,40 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
 using Rhino.Etl.Core;
 
 namespace EtlExample.Refactor
 {
     public class ProcessRefactor
     {
-        public CsvFileData CsvFileData { get; set; }
+        readonly CachingPropertyTypeValuesProvider propertyTypeValueProvider;
+
+        public ProcessRefactor()
+        {
+            propertyTypeValueProvider =
+                new CachingPropertyTypeValuesProvider(new DefaultPropertyTypeValuesProvider());
+        }
 
         public IEnumerable<SqlCommand> Execute(Row row)
         {
-            var propertyTypeValueProvider =
-                new CachingPropertyTypeValuesProvider(new DefaultPropertyTypeValuesProvider());
-            return CsvFileData
-                .SelectRowsAs(x =>
+            int addressId = Address.Load(row["locationIdentifier"].ToString()).AddressId;
+            var builder = new PropertyTypeCommandBuilder(propertyTypeValueProvider, addressId, row);
+            return builder.GetPropertyTypeCommandsFor<AddressPropertyType>(
+                (id, propertyTypeId, propertyValue) =>
                 {
-                    Debug.WriteLine("SelectRowAs");
-                    int id = Address.Load(x["locationIdentifier"]).AddressId;
-                    return new PropertyTypeCommandBuilder(propertyTypeValueProvider, id, x);
-                })
-                .SelectMany(x => x.GetPropertyTypeCommandsFor<AddressPropertyType>(
-                    (id, propertyTypeId, propertyValue) =>
+                    var command = new SqlCommand
                     {
-                        var command = new SqlCommand
-                        {
-                            CommandText =
-                                "INSERT INTO AddressProperties(AddressID, AddressPropertyTypeID, PropertyValue) VALUES(@addressId, @addressPropertyTypeId, @propertyValue)"
-                        };
+                        CommandText =
+                            "INSERT INTO AddressProperties(AddressID, AddressPropertyTypeID, PropertyValue) VALUES(@addressId, @addressPropertyTypeId, @propertyValue)"
+                    };
 
-                        command.Parameters.AddWithValue("addressId", id);
-                        command.Parameters.AddWithValue("addressPropertyTypeId", propertyTypeId);
-                        command.Parameters.AddWithValue("propertyValue", propertyValue);
-                        return command;
-                    }));
+                    command.Parameters.AddWithValue("addressId", id);
+                    command.Parameters.AddWithValue("addressPropertyTypeId", propertyTypeId);
+                    command.Parameters.AddWithValue("propertyValue", propertyValue);
+                    return command;
+                });
         }
     }
 

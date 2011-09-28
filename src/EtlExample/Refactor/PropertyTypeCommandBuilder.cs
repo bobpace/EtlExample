@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using Row = Rhino.Etl.Core.Row;
 
 namespace EtlExample.Refactor
 {
@@ -10,11 +11,11 @@ namespace EtlExample.Refactor
     {
         readonly IPropertyTypeValuesProvider _propertyTypeValuesProvider;
         readonly int _id;
-        readonly IDictionary<string, string> _data;
+        readonly Row _data;
 
         public PropertyTypeCommandBuilder(IPropertyTypeValuesProvider propertyTypeValuesProvider,
                                       int id,
-                                      IDictionary<string, string> data)
+                                      Row data)
         {
             _propertyTypeValuesProvider = propertyTypeValuesProvider;
             _id = id;
@@ -27,7 +28,7 @@ namespace EtlExample.Refactor
             return _propertyTypeValuesProvider
                 .GetPropertyTypes<T>()
                 .Select(kvp => kvp.ChangeValue(x => x.ChangeFirstLetterToLower()))
-                .Select(kvp => kvp.ChangeValue(x => _data[x]))
+                .Select(kvp => kvp.ChangeValue(x => _data[x].ToString()))
                 .TakeWhile(kvp => !string.IsNullOrEmpty(kvp.Value) && kvp.Value.ToLower() != "null")
                 .Select(kvp => commandCreator(_id, kvp.Key, kvp.Value));
         }
