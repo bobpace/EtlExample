@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using Rhino.Etl.Core;
@@ -9,7 +10,7 @@ namespace EtlExample.Refactor
     {
         public CsvFileData CsvFileData { get; set; }
 
-        public IEnumerable<Row> Execute(IEnumerable<Row> rows)
+        public IEnumerable<SqlCommand> Execute(Row row)
         {
             var propertyTypeValueProvider =
                 new CachingPropertyTypeValuesProvider(new DefaultPropertyTypeValuesProvider());
@@ -18,9 +19,22 @@ namespace EtlExample.Refactor
                 {
                     Debug.WriteLine("SelectRowAs");
                     int id = Address.Load(x["locationIdentifier"]).AddressId;
-                    return new PropertyTypeRowBuilder(propertyTypeValueProvider, id, x);
+                    return new PropertyTypeCommandBuilder(propertyTypeValueProvider, id, x);
                 })
-                .SelectMany(x => x.GetPropertyTypeRowsFor<AddressPropertyType>());
+                .SelectMany(x => x.GetPropertyTypeCommandsFor<AddressPropertyType>(
+                    (id, propertyTypeId, propertyValue) =>
+                    {
+                        var command = new SqlCommand
+                        {
+                            CommandText =
+                                "INSERT INTO AddressProperties(AddressID, AddressPropertyTypeID, PropertyValue) VALUES(@addressId, @addressPropertyTypeId, @propertyValue)"
+                        };
+
+                        command.Parameters.AddWithValue("addressId", id);
+                        command.Parameters.AddWithValue("addressPropertyTypeId", propertyTypeId);
+                        command.Parameters.AddWithValue("propertyValue", propertyValue);
+                        return command;
+                    }));
         }
     }
 

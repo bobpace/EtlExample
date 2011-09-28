@@ -82,6 +82,8 @@
     <Reference Include="Rhino.Etl.Dsl">
       <HintPath>..\..\packages\Rhino-Etl.1.1.0.0\lib\Rhino.Etl.Dsl.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
