@@ -27,10 +27,22 @@ namespace EtlExample.Refactor
             Debug.WriteLine("GetPropertyTypeCommandsFor");
             return _propertyTypeValuesProvider
                 .GetPropertyTypes<T>()
-                .Select(kvp => kvp.ChangeValue(x => x.ChangeFirstLetterToLower()))
-                .Select(kvp => kvp.ChangeValue(x => _data[x].ToString()))
-                .TakeWhile(kvp => !string.IsNullOrEmpty(kvp.Value) && kvp.Value.ToLower() != "null")
-                .Select(kvp => commandCreator(_id, kvp.Key, kvp.Value));
+                .Select(kvp =>
+                {
+                    return kvp.ChangeValue(x => x.ChangeFirstLetterToLower());
+                })
+                .Select(kvp =>
+                {
+                    return kvp.ChangeValue(x => _data[x].ToString());
+                })
+                .TakeWhile(kvp =>
+                {
+                    return !string.IsNullOrEmpty(kvp.Value) && kvp.Value.ToLower() != "null";
+                })
+                .Select(kvp =>
+                {
+                    return commandCreator(_id, kvp.Key, kvp.Value);
+                });
         }
     }
 }

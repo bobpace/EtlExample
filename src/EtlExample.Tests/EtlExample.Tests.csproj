@@ -56,6 +56,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="ExtendHealth.FubuBase">
+      <HintPath>..\..\..\..\..\Users\rpace\Desktop\test\web2\ExtendHealth.FubuBase.dll</HintPath>
+    </Reference>
     <Reference Include="FileHelpers">
       <HintPath>..\..\packages\FileHelpers.2.0.0.0\lib\FileHelpers.dll</HintPath>
     </Reference>

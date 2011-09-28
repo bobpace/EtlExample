@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using Rhino.Etl.Core;
 
 namespace EtlExample.Refactor
@@ -21,6 +22,7 @@ namespace EtlExample.Refactor
             return builder.GetPropertyTypeCommandsFor<AddressPropertyType>(
                 (id, propertyTypeId, propertyValue) =>
                 {
+                    Debug.WriteLine("creating command");
                     var command = new SqlCommand
                     {
                         CommandText =
