@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using EtlExample.Refactor;
-using Xunit;
+using NUnit.Framework;
 
 namespace EtlExample.Tests.Refactor
 {
-    public class ProcessRefactorTests : Verifies<ProcessRefactor>
+    [TestFixture]
+    public class ProcessRefactorTests
     {
-        [Fact]
+        [Test]
         public void deferred_execution_on_execute()
         {
             var data = new Dictionary<string, IDictionary<string, string>>

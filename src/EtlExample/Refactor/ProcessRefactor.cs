@@ -16,7 +16,7 @@ namespace EtlExample.Refactor
             return CsvFileData
                 .SelectRowsAs(x =>
                 {
-                    Debug.WriteLine("selecting as property type row builder");
+                    Debug.WriteLine("SelectRowAs");
                     int id = Address.Load(x["locationIdentifier"]).AddressId;
                     return new PropertyTypeRowBuilder(propertyTypeValueProvider, id, x);
                 })

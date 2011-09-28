@@ -15,7 +15,7 @@ namespace EtlExample.Refactor
                 throw new ArgumentException("T must be an enum");
             }
 
-            Debug.WriteLine("returning property types");
+            Debug.WriteLine("GetPropertyTypes");
             return Enum.GetValues(enumType)
                 .Cast<int>()
                 .Zip(Enum.GetNames(enumType), (key, value) => new KeyValuePair<int, string>(key, value));

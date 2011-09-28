@@ -1,25 +1,26 @@
 ﻿using System.Collections.Generic;
 using EtlExample.Refactor;
-using Xunit;
+using NUnit.Framework;
 
 namespace EtlExample.Tests.Refactor
 {
+    [TestFixture]
     public class ExtensionsTests
     {
-        [Fact]
+        [Test]
         public void can_lowercase_first_letter_of_string()
         {
             const string input = "This is a string";
             var output = input.ChangeFirstLetterToLower();
-            Assert.Equal(output, "this is a string");
+            Assert.AreEqual(output, "this is a string");
         }
 
-        [Fact]
+        [Test]
         public void can_change_value_of_key_value_pair()
         {
             var input = new KeyValuePair<int, string>(0, "work");
             var output = input.ChangeValue(x => string.Format("does this {0}", x));
-            Assert.Equal("does this work", output.Value);
+            Assert.AreEqual("does this work", output.Value);
         }
     }
 }

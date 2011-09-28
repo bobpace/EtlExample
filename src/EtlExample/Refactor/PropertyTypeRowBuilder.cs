@@ -23,7 +23,7 @@ namespace EtlExample.Refactor
 
         public IEnumerable<Row> GetPropertyTypeRowsFor<T>(CreatePropertyTypeRow<T> rowCreator) where T : struct, IConvertible
         {
-            Debug.WriteLine("getting property type rows for");
+            Debug.WriteLine("GetPropertyTypeRowsFor");
             return _propertyTypeValuesProvider
                 .GetPropertyTypes<T>()
                 .Select(kvp => kvp.ChangeValue(x => x.ChangeFirstLetterToLower()))
@@ -39,7 +39,7 @@ namespace EtlExample.Refactor
 
         public static Row DefaultRow(int id, int propertyTypeId, string propertyValue, Type propertyTypeEnum)
         {
-            Debug.WriteLine("creating row");
+            Debug.WriteLine("DefaultRow");
             var typeName = propertyTypeEnum.Name;
             var idColumnName = string.Format("{0}ID", typeName.Replace("PropertyType", ""));
             var propertyTypeIdColumnName = string.Format("{0}ID", typeName);

@@ -1,21 +1,21 @@
-﻿// ReSharper disable InconsistentNaming
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using EtlExample.Refactor;
+using NUnit.Framework;
 using Rhino.Etl.Core;
-using Rhino.Mocks;
-using Xunit;
 
 namespace EtlExample.Tests.Refactor
 {
-    public class PropertyTypeRowBuilderTests : Verifies<IPropertyTypeRowBuilder, PropertyTypeRowBuilder>
+    [TestFixture]
+    public class PropertyTypeRowBuilderTests
     {
-        readonly int _id;
-        readonly IDictionary<string, string> _data;
-        IPropertyTypeValuesProvider propertyTypeValuesProvider;
+        int _id;
+        IDictionary<string, string> _data;
+        PropertyTypeRowBuilder SUT;
 
-        public PropertyTypeRowBuilderTests()
+        [SetUp]
+        public void SetUp()
         {
             _id = 100;
             _data = new Dictionary<string, string>
@@ -25,26 +25,19 @@ namespace EtlExample.Tests.Refactor
                 {"sampleName", "value3"},
             };
 
-            propertyTypeValuesProvider = MockFor<IPropertyTypeValuesProvider>();
-            propertyTypeValuesProvider
-                .Expect(x => x.GetPropertyTypes<SampleAddressPropertyType>())
-                .Return(new DefaultPropertyTypeValuesProvider().GetPropertyTypes<SampleAddressPropertyType>());
-
-            Services.Container.Configure(
-                x => x.For<PropertyTypeRowBuilder>()
-                    .Use(() => new PropertyTypeRowBuilder(propertyTypeValuesProvider, _id, _data)));
+            SUT = new PropertyTypeRowBuilder(new DefaultPropertyTypeValuesProvider(), _id, _data);
         }
 
-        [Fact]
+        [Test]
         public void get_property_type_rows_for_enum_produces_one_row_per_enum_value()
         {
             var enumerable = SUT.GetPropertyTypeRowsFor<SampleAddressPropertyType>();
 
             var enumLength = Enum.GetValues(typeof(SampleAddressPropertyType)).Length;
-            Assert.Equal(enumerable.Count(), enumLength);
+            Assert.AreEqual(enumerable.Count(), enumLength);
         }
 
-        [Fact]
+        [Test]
         public void and_fetches_value_from_data_dictionary_by_enum_name_with_first_letter_to_lowered()
         {
             var enumerable = SUT.GetPropertyTypeRowsFor<SampleAddressPropertyType>(
@@ -53,14 +46,17 @@ namespace EtlExample.Tests.Refactor
                 {
                     var originalEnumValue = (SampleAddressPropertyType) propertyTypeId;
                     var keyToFetchWith = originalEnumValue.ToString().ChangeFirstLetterToLower();
-                    Assert.Equal(_data[keyToFetchWith], value);
+                    Assert.AreEqual(_data[keyToFetchWith], value);
                     return new Row();
                 });
             //force enumeration of enumerable to assert test logic
-            enumerable.Count();
+            var enumerator = enumerable.GetEnumerator();
+            while(enumerator.MoveNext())
+            {
+            }
         }
 
-        [Fact]
+        [Test]
         public void default_row_follows_convention_for_property_type_enums()
         {
             const int id = 1000;
@@ -68,9 +64,9 @@ namespace EtlExample.Tests.Refactor
             const string value = "test";
 
             Row row = PropertyTypeRowBuilder.DefaultRow(id, propertyTypeId, value, typeof(SampleAddressPropertyType));
-            Assert.Equal(row["SampleAddressID"], id);
-            Assert.Equal(row["SampleAddressPropertyTypeID"], propertyTypeId);
-            Assert.Equal(row["PropertyValue"], value);
+            Assert.AreEqual(row["SampleAddressID"], id);
+            Assert.AreEqual(row["SampleAddressPropertyTypeID"], propertyTypeId);
+            Assert.AreEqual(row["PropertyValue"], value);
         }
 
         private enum SampleAddressPropertyType
@@ -81,4 +77,3 @@ namespace EtlExample.Tests.Refactor
         }
     }
 }
-// ReSharper restore InconsistentNaming

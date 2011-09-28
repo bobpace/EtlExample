@@ -16,7 +16,7 @@ namespace EtlExample.Refactor
 
         public static KeyValuePair<TKey, TValue> ChangeValue<TKey, TValue>(this KeyValuePair<TKey, TValue> item, Func<TValue, TValue> provideNewValue)
         {
-            Debug.WriteLine("changing value");
+            Debug.WriteLine("ChangeValue");
             var oldValue = item.Value;
             var newValue = provideNewValue(oldValue);
             return new KeyValuePair<TKey, TValue>(item.Key, newValue);
